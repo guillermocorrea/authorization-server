@@ -5,7 +5,7 @@ namespace JobBoardApi.Controllers
 {
   [Route("api/jobs")]
   [ApiController]
-  [Authorize]
+  // [Authorize]
   public class JobsController : ControllerBase
   {
     public IActionResult GetJobs()

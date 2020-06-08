@@ -54,6 +54,16 @@ namespace AuthorizationServer.Configuration
         ClientSecrets = new [] { new Secret("Pa$$w0rd".Sha512()) },
         AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
         AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, "jobBoardApi" }
+        },
+        new Client
+        {
+        ClientName = "MVC Client",
+        ClientId = "mvc-client",
+        AllowedGrantTypes = GrantTypes.Hybrid,
+        RedirectUris = new List<string> { "https://localhost:5010/signin-oidc" },
+        AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile },
+        ClientSecrets = { new Secret("MVCSecret".Sha512()) },
+        PostLogoutRedirectUris = new List<string> { "https://localhost:5010/signout-callback-oidc" }
         }
       };
   }
