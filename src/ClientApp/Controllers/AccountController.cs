@@ -11,5 +11,10 @@ namespace ClientApp.Controllers
       await HttpContext.SignOutAsync("Cookies");
       await HttpContext.SignOutAsync("oidc");
     }
+
+    public IActionResult AccessDenied()
+    {
+      return View();
+    }
   }
 }
