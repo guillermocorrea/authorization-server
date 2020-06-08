@@ -42,6 +42,9 @@ namespace AuthorizationServer.Configuration
         }
       };
 
+    public static IEnumerable<ApiResource> GetApiResources() =>
+      new List<ApiResource> { new ApiResource("jobBoardApi", "Job board API") };
+
     public static IEnumerable<Client> GetClients() =>
       new List<Client>
       {
@@ -50,7 +53,7 @@ namespace AuthorizationServer.Configuration
         ClientId = "job-board",
         ClientSecrets = new [] { new Secret("Pa$$w0rd".Sha512()) },
         AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
-        AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId }
+        AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, "jobBoardApi" }
         }
       };
   }

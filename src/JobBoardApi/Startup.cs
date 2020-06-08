@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AuthorizationServer.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace AuthorizationServer
+namespace JobBoardApi
 {
   public class Startup
   {
@@ -17,14 +16,15 @@ namespace AuthorizationServer
     // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddIdentityServer()
-        .AddInMemoryApiResources(InMemoryConfig.GetApiResources())
-        .AddInMemoryIdentityResources(InMemoryConfig.GetIdentityResources())
-        .AddTestUsers(InMemoryConfig.GetUsers())
-        .AddInMemoryClients(InMemoryConfig.GetClients())
-        .AddDeveloperSigningCredential(); //not something we want to use in a production environment;
+      services.AddAuthentication("Bearer")
+        .AddJwtBearer("Bearer", opt =>
+        {
+          opt.RequireHttpsMetadata = false;
+          opt.Authority = "https://localhost:5005";
+          opt.Audience = "jobBoardApi";
+        });
 
-      services.AddControllersWithViews();
+      services.AddControllers();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,12 +35,11 @@ namespace AuthorizationServer
         app.UseDeveloperExceptionPage();
       }
 
-      app.UseStaticFiles();
       app.UseRouting();
-
-      app.UseIdentityServer();
-
+      
+      app.UseAuthentication();
       app.UseAuthorization();
+      
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapDefaultControllerRoute();
