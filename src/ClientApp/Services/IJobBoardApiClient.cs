@@ -5,6 +5,6 @@ namespace ClientApp.Services
 {
   public interface IJobBoardApiClient
   {
-    HttpClient GetClient();
+    Task<HttpClient> GetClient();
   }
 }

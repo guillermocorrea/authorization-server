@@ -14,7 +14,9 @@ namespace AuthorizationServer.Configuration
         new IdentityResources.OpenId(),
         new IdentityResources.Profile(),
         new IdentityResources.Address(),
-        new IdentityResource("roles", "User role(s)", new List<string> { "role" })
+        new IdentityResource("roles", "User role(s)", new List<string> { "role" }),
+        new IdentityResource("position", "Your position", new List<string> { "position" }),
+        new IdentityResource("country", "Your country", new List<string> { "country" })
       };
 
     public static List<TestUser> GetUsers() =>
@@ -30,7 +32,9 @@ namespace AuthorizationServer.Configuration
         new Claim("given_name", "Mick"),
         new Claim("family_name", "Mining"),
         new Claim("address", "Long Avenue 289"),
-        new Claim("role", "Admin")
+        new Claim("role", "Admin"),
+        new Claim("position", "Administrator"),
+        new Claim("country", "USA")
         }
         },
         new TestUser
@@ -43,7 +47,9 @@ namespace AuthorizationServer.Configuration
         new Claim("given_name", "Jane"),
         new Claim("family_name", "Downing"),
         new Claim("address", "Sunny Street 4"),
-        new Claim("role", "Visitor")
+        new Claim("role", "Visitor"),
+        new Claim("position", "Viewer"),
+        new Claim("country", "USA")
         }
         }
       };
@@ -71,7 +77,10 @@ namespace AuthorizationServer.Configuration
         IdentityServerConstants.StandardScopes.OpenId,
         IdentityServerConstants.StandardScopes.Profile,
         IdentityServerConstants.StandardScopes.Address,
-        "roles"
+        "roles",
+        "jobBoardApi",
+        "position",
+        "country"
         },
         ClientSecrets = { new Secret("MVCSecret".Sha512()) },
         PostLogoutRedirectUris = new List<string> { "https://localhost:5010/signout-callback-oidc" }

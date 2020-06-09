@@ -1,13 +1,24 @@
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
 @model string[]
+
 
 @if (User.Identity.IsAuthenticated)
 {
   <a asp-controller="Account" asp-action="Logout">Logout</a>
   <a asp-action="Privacy">Privacy</a>
   @if (User.IsInRole("Admin")) {
-    <span>Admin</span>
+    <span>Admin Role</span>
   } else {
-    <span>Visitor</span>
+    <span>Visitor Role</span>
+  }
+
+  @if ((await AuthorizationService.AuthorizeAsync(User, "CanCreateAndModifyData")).Succeeded)
+  {
+    <span><strong>Policy:</strong> CanCreateAndModifyData</span>
+  } else {
+    <span><strong>No access Policy:</strong> CanCreateAndModifyData</span>
   }
 }
 

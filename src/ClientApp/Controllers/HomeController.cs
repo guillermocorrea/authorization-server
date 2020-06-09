@@ -1,3 +1,4 @@
+using System.Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace ClientApp.Controllers
     }
     public async Task<IActionResult> Index()
     {
-      var client = _jobBoardApiClient.GetClient();
+      var client = await _jobBoardApiClient.GetClient();
       var response = await client.GetAsync("api/jobs").ConfigureAwait(false);
 
       if (response.IsSuccessStatusCode)
@@ -34,11 +35,16 @@ namespace ClientApp.Controllers
         var jobs = JsonConvert.DeserializeObject<string[]>(responseString);
         return View(jobs);
       }
+      else if (response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden)
+      {
+        return RedirectToAction("AccessDenied", "Account");
+      }
 
       throw new Exception($"Problem with fetching data from the API: {response.ReasonPhrase}");
     }
 
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "CanCreateAndModifyData")]
     public async Task<IActionResult> Privacy()
     {
       var client = new HttpClient();
